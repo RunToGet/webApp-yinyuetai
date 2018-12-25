@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable='no',minimum-scale=1.0,maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/su-carousel.css">
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="head">
+            <div class="logo-wrap">
+                <a class="logo" href="http://www.baidu.com">
+                    <!-- <img src="./images/logo.png" alt="logo"> -->
+                </a>
+            </div>
+            <div class="login-wrap fr">
+                <a href="javascript:;">登录</a>
+            </div>
+            <div class="search-wrap fr">
+                <a href=""></a>
+            </div>
+        </div>
+        <div class="content">
+            <!-- 导航 -->
+            <div class="nav-bar">
+                <ul class="nav-bar-list">
+                    <li class="active">
+                        <a href="javascript:;">首页</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">MV</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">悦单</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">V榜</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">音乐</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">商城</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">饭团</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">咨询</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">我的家</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">APP下载</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">热门应用</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">晓飞张</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">金龙油</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">邱海峰</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">小贱贱</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">你</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- 轮播 -->
+            <div class="carousel-wrap">
+                <div class="points-wrap">
+
+                </div>
+            </div>
+            <!-- MV首播 -->
+            <div class="mvbox firstshow">
+                <div class="mvbox-title">
+                    <h3 class="title fl">MV首播</h3>
+                    <span class="change fr"><i></i>换一换</span>
+                </div>
+                <div class="mvbox-content"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="./js/su-carousel.js"></script>
+    <script src="./js/index.js"></script>
+    <script>
+        window.onload = function () {
+            // 阻止默认事件
+            document.addEventListener('touchstart', function (ev) {
+                ev = ev || event
+                ev.preventDefault()
+            }, { passive: false })
+            // rem适配
+            let styleNode = document.createElement('style')
+            let w = document.documentElement.clientWidth / 16
+            styleNode.innerHTML = `html{font-size:${w}px !important}`
+            document.head.appendChild(styleNode)
+            drag()
+            let arr = ['./images/01.jpg','./images/02.jpg','./images/03.jpg','./images/04.jpg','./images/05.jpg','./images/06.jpg','./images/07.jpg','./images/08.jpg','./images/09.jpg','./images/10.jpg',]
+            let setting = {
+                data:arr,
+                loop:true,
+                autoPlay:false
+            }
+            SU.carousel(setting)
+        }
+
+    </script>
+</body>
+
+</html>

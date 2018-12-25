@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        html,body{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .list {
+            list-style: none;
+            width: 400%;
+            overflow: hidden;
+            position: absolute;
+        }
+        .list>li{
+            float: left;
+            width: 25%;
+            /* display: inline-block; */
+        }
+        .list>li>a{
+            display:block;
+        }
+        .list>li>a>img{
+            width: 100%;
+            display: block;
+            /* vertical-align: top; */
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="carousel-wrap"></ul>
+    <script type="text/javascript" src="cl.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            document.addEventListener('touchstart', function (ev) {
+                ev = ev || event
+                ev.preventDefault()
+            })
+            var arr = ["./images/01.webp", "./images/02.webp", "./images/03.webp", "./images/04.webp", "./images/01.webp"]
+            cl.carousel(arr)
+        }
+    </script>
+
+</body>
+
+</html>
