@@ -1,4 +1,4 @@
-;(function (w) {
+; (function (w) {
     w.SU = {}    //命名空间
     // 读写操作的元素属性
     SU.css = function (node, type, val) {
@@ -54,7 +54,7 @@
             autoPlay: false
         }
         let arr = setting.data
-        if(Object.prototype.toString.call(arr) !== '[object Array]'){
+        if (Object.prototype.toString.call(arr) !== '[object Array]') {
             alert('没有传入数据参数')
             return false;
         }
@@ -113,16 +113,20 @@
             // 4. 将手指滑动的距离加给元素
 
             // 启动定时器
-            if (setting.autoPlay){
+            if (setting.autoPlay) {
                 autoPlay()
             }
+            let isX = true
+            let isFirst = true
             let startX = 0
+            let startY = 0
             let elementX = 0
             carouselWrap.addEventListener('touchstart', function (ev) {
                 ev = ev || event
                 let touchC = ev.changedTouches[0]
                 clearInterval(timer)   //手指点上屏幕的瞬间，清除定时器
                 startX = touchC.clientX
+                startY = touchC.clientY
                 if (setting.loop) {
                     index = SU.css(ulNode, 'translateX') / document.documentElement.clientWidth
                     if (-index === 0) {
@@ -134,14 +138,29 @@
                 }
                 elementX = SU.css(ulNode, 'translateX')
                 ulNode.style.transition = 'none'
-
+                isX = true
+                isFirst = true
             })
             carouselWrap.addEventListener('touchmove', function (ev) {
+                if(!isX){
+                    return;
+                }
                 ev = ev || event
                 let touchC = ev.changedTouches[0]
                 let nowX = touchC.clientX
-                let disX = (nowX - startX) * 1.5   //设置一个倍数，使图片滑动的距离比手指滑动的距离长一点
-                SU.css(ulNode, 'translateX', elementX + disX)
+                let nowY = touchC.clientY
+                let disX = nowX - startX  //设置一个倍数，使图片滑动的距离比手指滑动的距离长一点
+                let disY = nowY - startY
+
+
+                if(isFirst){
+                    isFirst = false
+                    if(Math.abs(disY)>Math.abs(disX)){
+                        isX = false
+                        return;
+                    }
+                }
+                SU.css(ulNode, 'translateX', elementX + disX*1.5)
             })
             carouselWrap.addEventListener('touchend', function () {
                 index = SU.css(ulNode, 'translateX') / document.documentElement.clientWidth
@@ -157,7 +176,7 @@
                 SU.css(ulNode, 'translateX', index * document.documentElement.clientWidth)
                 ulNode.style.transform = `translateX(${SU.css(ulNode, 'translateX')}px)`
                 if (setting.autoPlay) {      //启动定时器
-                    autoPlay()   
+                    autoPlay()
                 }
             })
             // 小圆点根据图片改变索引(分页)
@@ -173,7 +192,7 @@
                     clearInterval(autoPlay)
                     if (index === -(arr.length - 1)) {
                         ulNode.style.transition = 'none'
-                        if(setting.loop){
+                        if (setting.loop) {
                             index = -(arr.length / 2 - 1)
                         }
                         SU.css(ulNode, 'translateX', index * document.documentElement.clientWidth)
@@ -188,5 +207,99 @@
             }
         }
 
+    }
+    // 导航
+    SU.dragNav = function () {
+        let topBar = document.querySelector('.su-nav-bar')
+        let ulList = document.querySelector('.su-nav-bar>.nav-bar-list')
+        let minX = topBar.clientWidth - ulList.offsetWidth
+
+        let startX = 0;
+        let elementX = 0;
+        // 快速滑屏
+        let lastTime = 0;
+        let lastPoint = 0;
+        let ponitDis = 0;
+        let timeDis = 0;
+
+        topBar.addEventListener('touchstart', function (ev) {
+            ev = ev || event
+            ulList.style.transition = 'none'
+            ulList.handMove = false
+            ponitDis = 0; //每一次点击重置pointDis的距离（微观上的一个距离）
+            let touchedC = ev.changedTouches[0]
+            startX = touchedC.clientX
+            elementX = SU.css(ulList, 'translateX')
+            //快速滑屏
+            lastTime = new Date().getTime()
+            // lastPoint = startX
+            // lastPoint = SU.css(ulList, 'translateX')
+            lastPoint = touchedC.clientX
+        })
+        topBar.addEventListener('touchmove', function (ev) {
+
+            ev = ev || event
+            let touchedC = ev.changedTouches[0]
+            let nowX = touchedC.clientX
+            disX = nowX - startX
+            let translateX = disX + elementX
+            // translateX = SU.css(ulList,'translateX') + disX
+
+            //快速滑屏
+            let nowTime = new Date().getTime()
+            let nowPoint = touchedC.clientX
+            //  let nowPoint = SU.css(ulList, 'translateX')
+            ponitDis = nowPoint - lastPoint
+            timeDis = nowTime - lastTime
+            lastPoint = nowPoint
+            lastTime = nowTime
+
+
+            // 手动滑屏
+            // console.log(translateX)
+            if (translateX > 0) {
+                ulList.handMove = true
+                let scale = document.documentElement.clientWidth / ((document.documentElement.clientWidth + translateX) * 2)
+                // translateX = elementX + disX * scale
+                translateX = SU.css(ulList, 'translateX') + ponitDis * scale
+            } else if (translateX < minX) {
+                ulList.handMove = true
+                let over = document.documentElement.clientWidth - (ulList.offsetWidth + translateX)
+                let scale = document.documentElement.clientWidth / ((document.documentElement.clientWidth + over) * 2)
+                translateX = SU.css(ulList, 'translateX') + ponitDis * scale
+            }
+            SU.css(ulList, 'translateX', translateX)
+        })
+        topBar.addEventListener('touchend', function () {
+            let translateX = SU.css(ulList, 'translateX')
+            if (!ulList.handMove) {   // 快速滑屏
+                let cubic = ''
+                speed = ponitDis / timeDis
+                ponitDis = 0
+                speed = Math.abs(speed) > 0.8 ? speed : 0
+                let time = Math.abs(speed) * 0.2
+                time = time > 0.8 ? time : 0.8
+                time = time < 1.5 ? time : 1.5
+                translateX = translateX + speed * 100
+                if (translateX > 0) {
+                    translateX = 0
+                    cubic = 'cubic-bezier(.19,1.44,.95,1.48)'
+                } else if (translateX < minX) {
+                    translateX = minX
+                    cubic = 'cubic-bezier(.19,1.44,.95,1.48)'
+                }
+                SU.css(ulList, 'translateX', translateX)
+                ulList.style.transition = `${cubic} transform ${time}s`
+            } else {    // 手动滑屏
+                if (translateX > 0) {
+                    translateX = 0
+                    SU.css(ulList, 'translateX', translateX)
+                } else if (translateX < minX) {
+                    translateX = minX
+                    SU.css(ulList, 'translateX', translateX)
+                }
+                ulList.style.transition = `transform 0.75s`
+            }
+        })
     }
 })(window)
