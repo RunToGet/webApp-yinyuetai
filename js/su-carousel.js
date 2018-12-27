@@ -203,7 +203,7 @@
                         setPagination(index % paginationPointsLength)
                         SU.css(ulNode, 'translateX', index * document.documentElement.clientWidth)
                     }, 50)
-                }, 2000)
+                }, 5000)
             }
         }
 

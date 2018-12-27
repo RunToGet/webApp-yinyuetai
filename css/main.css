@@ -29,6 +29,17 @@ html,body{
     height: 100%;
     overflow: hidden;
 }
+.clearfix{
+    zoom: 1;
+}
+.clearfix:after{
+    display: table;
+    content:"";
+    width: 0;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
 /* 头部 */
 .head{
     width: 100%;
@@ -120,7 +131,7 @@ html,body{
 }
 .mvbox{
     width: 100%;
-    background-color: aqua;
+    /* background-color: aqua; */
     /* height: 10rem; */
 }
 .mvbox-title{
@@ -154,12 +165,19 @@ html,body{
     margin-right: 0.2rem;
 }
 .mvbox-content{
-
+    width: 300%;
 }
 .mvbox-content ul{
-    width: 16rem;
+    width: 33.333333333%;
     padding: 0 0.192rem;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    float: left;
+}
+.mvbox-content ul.mvbox-loading{
+    background: url('../images/loading.gif') no-repeat;
+    background-position: center;
+    height: 10rem;
+    opacity: 0;
 }
 .mvbox-content ul li.mvbox-item{
     width: 7.424rem;
