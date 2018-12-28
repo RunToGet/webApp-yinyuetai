@@ -139,7 +139,28 @@ html,body{
     /* background-color: aqua; */
     /* height: 10rem; */
 }
+/* 0.5像素的实现 */
+.mvbox-title::before{
+    position: absolute;
+    bottom: 0;
+    display: block;
+    content: "";
+    width: 16rem;
+    height: 1px;
+    background-color: #000;
+}
+@media (-webkit-device-pixel-ratio:2){
+    .mvbox-title::before{
+        transform: scaleY(0.5)
+    }
+}
+@media (-webkit-device-pixel-ratio:3){
+    .mvbox-title::before{
+        transform: scaleY(0.5)
+    }
+}
 .mvbox-title{
+    position: relative;
     line-height: 1.88rem;
     height: 1.88rem;
     width: 100%;
@@ -169,6 +190,7 @@ html,body{
     vertical-align: middle;
     margin-right: 0.2rem;
 }
+
 .mvbox-nav{
     position: relative;
     width: 100%;
@@ -188,8 +210,9 @@ html,body{
 .mvbox-nav .greenLine{
     position: absolute;
     bottom: 0;
-    left: 0.75rem;
-    width: 1.2rem;
+    left:0;
+    /* left: 0.75rem; */
+    /* width: 1.2rem; */
     height: 0.15rem;
     background-color: #690;
 }

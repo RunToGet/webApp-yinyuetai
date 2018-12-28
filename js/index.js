@@ -47,6 +47,7 @@ window.onload = function () {
         })
     }
 
+
     // tab选项卡的切换
     tabToggle()
     function tabToggle() {
@@ -68,6 +69,15 @@ window.onload = function () {
             let isFirst = true
             let isOver = false
             let loadingTabs = tab.querySelectorAll('.mvbox-loading')
+            let mvBox = tab.parentNode
+            let greenLine = mvBox.querySelector('.greenLine')
+            let aNodes;
+            let now = 0   //小绿当前的序数
+            if(mvBox.querySelector('.mvbox-nav')){
+                aNodes = mvBox.querySelector('.mvbox-nav').querySelectorAll('a')
+            }
+           greenLine.style.width = aNodes[0].offsetWidth + 'px'
+           SU.css(greenLine,'translateX',aNodes[0].offsetLeft)
             tab.addEventListener('touchstart', function (ev) {
                 if (isOver) {
                     return
@@ -134,9 +144,20 @@ window.onload = function () {
                 }
                 console.log('jump')
                 if (Math.abs(disX) > w / 2) {
-                    tab.style.transition = '1s transform'
+                    tab.style.transition = '0.5s transform'
+                    greenLine.style.transition = '0.5s transform,1s width'
                     let translateX = disX > 0 ? 0 : (-2 * w)
+
+                    disX > 0 ? now-- : now ++
+                    if(now<0){
+                        now = aNodes.length - 1
+                    }else if(now>aNodes.length - 1){
+                        now = 0
+                    }
+                    greenLine.style.width = aNodes[now].offsetWidth + 'px'
+                    SU.css(greenLine,'translateX',aNodes[now].offsetLeft)
                     SU.css(tab, 'translateX', translateX)
+                    //页面滑动的过渡动画过程中，下绿也开始过渡，且时间设置为相同
                     isOver = true
                     tab.addEventListener('transitionend', endFn)
                     tab.addEventListener('webkitTransitionEnd', endFn)
@@ -154,7 +175,7 @@ window.onload = function () {
                             }
                             SU.css(tab, 'translateX', -w)
                             isOver = false
-                        }, 2000)
+                        }, 1000)
                     }
 
                 }

@@ -15,6 +15,7 @@
                     switch (item) {
                         case 'translateX':
                         case 'translateY':
+                        case 'translateZ':   
                             text += `${item}(${node['transform'][item]}px)`;
                             break;
                         case 'scale':
@@ -71,6 +72,7 @@
             // 布局
             // 轮播图动态插入
             let ulNode = document.createElement('ul')
+            SU.css(ulNode,'translateZ',0)   // 使用3D硬件加速
             let styleNode = document.createElement('style')
             ulNode.classList.add('list')
             for (let i = 0; i < arr.length; i++) {
@@ -203,7 +205,7 @@
                         setPagination(index % paginationPointsLength)
                         SU.css(ulNode, 'translateX', index * document.documentElement.clientWidth)
                     }, 50)
-                }, 5000)
+                }, 2000)
             }
         }
 
